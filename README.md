@@ -19,7 +19,7 @@ Use the script
   
   //configure vSlider
   vSlider.options({
-		elem: '#banner',
+		elem: '#d_banner',
 		width: 600,
 		height: 300,
 		imgArray: img,
