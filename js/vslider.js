@@ -1,41 +1,48 @@
-/*  (c)2015 Josue Marin Ch - josue.marin.ch@gmail.com  */
+/*  
+    vanillaSlider - vSlider v.1.2.1
+    (c)2015 Josue Marin Ch josue.marin.ch@gmail.com 
+    https://github.com/corioquix/vSlider 
+*/
 
 var vSlider = {
     obj: {
-        img: [],
-        width: 400,
-        height: 320,
         time: 3E3,
-        elem: void 0
+        elem: undefined
     },
-    options: function(a) {
-        this.obj.elem = a.elem || !1;
-        this.obj.time = a.time || 3E3;
-        this.obj.width = a.width || 400;
-        this.obj.height = a.height || 320;
-        this.obj.img = a.imgArray || []
+    options: function(data) {
+        this.obj.elem = data.byId || false;
+        this.obj.time = data.time || 3E3
     },
     ini: function() {
-        this.obj.elem.style.width = this.obj.width;
-        this.obj.elem.style.height = this.obj.height;
-        this.obj.elem.style["background-repeat"] = "no-repeat";
-        this.obj.elem.style["background-color"] = "#000000";
-        this.obj.elem.style["font-family"] = "Lucida Console";
-        this.obj.elem.style.color = "#ffffff";
-        this.obj.elem.style.padding = "0.5em";
-        this.obj.elem.style["background-size"] = "100%";
-        this.obj.elem.innerHTML = "..Wait a moment :)"
+        var count = this.obj.elem.childElementCount,
+            querySel = this.obj.elem.getAttribute("id");
+        for (var i = 1; i < count; i++) document.querySelector("#" + querySel + " div:nth-child(" + i + ")").style.display = "none"
     },
     update: function() {
-        var a = this.obj.img,
-            d = this.obj.img.length,
-            b = 0,
-            c = this.obj.elem;
+        var obj_div_count = this.obj.elem.childElementCount,
+            querySel = this.obj.elem.getAttribute("id"),
+            count = 1,
+            sec_count = count - 1,
+            obj_elem = this.obj.elem,
+            time = this.obj.time;
         setInterval(function() {
-            b == d ? b = 0 : (c.innerHTML = "", c.style["background-image"] = 'url("' + a[b] + '")', b++)
-        }, this.obj.time)
+            sec_count = count - 1;
+            if (count > obj_div_count) {
+                count = 1;
+                sec_count = count - 1
+            } else {
+                if (sec_count > 0) document.querySelector("#" + querySel + " div:nth-child(" + sec_count + ")").style.display = "none";
+                else document.querySelector("#" + querySel + " div:nth-child(" + obj_div_count + ")").style.display = "none";
+                document.querySelector("#" + querySel + " div:nth-child(" + count + ")").style.display = "block";
+                count++
+            }
+        }, time)
     },
     start: function() {
-        this.obj.elem ? (this.obj.elem = document.querySelector(this.obj.elem), this.ini(), this.update()) : console.warn("Select a element")
+        if (this.obj.elem) {
+            this.obj.elem = document.getElementById(this.obj.elem);
+            this.ini();
+            this.update()
+        } else console.warn("Select a element")
     }
 };
